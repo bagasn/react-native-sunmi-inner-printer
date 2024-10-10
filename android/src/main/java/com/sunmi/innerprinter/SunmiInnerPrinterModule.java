@@ -10,6 +10,8 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.Promise;
+
+import android.os.Build;
 import android.widget.Toast;
 
 import java.util.Map;
@@ -102,7 +104,11 @@ public class SunmiInnerPrinterModule extends ReactContextBaseJavaModule {
         mFilter.addAction(KNIFE_ERROR_2_ACTION);
         mFilter.addAction(OVER_HEATING_ACITON);
         mFilter.addAction(FIRMWARE_UPDATING_ACITON);
-        getReactApplicationContext().registerReceiver(receiver, mFilter);
+        if (Build.VERSION.SDK_INT >= 33) {
+            getReactApplicationContext().registerReceiver(receiver, mFilter, Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            getReactApplicationContext().registerReceiver(receiver, mFilter);
+        }
         Log.d("PrinterReceiver", "------------ init ");
     }
 
